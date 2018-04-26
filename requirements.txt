@@ -1,0 +1,5 @@
+ansible>=2.2.0,<2.3.0'
+shade
+jmespath
+python-openstackclient
+python-heatclient

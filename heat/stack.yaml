@@ -14,7 +14,7 @@ parameters:
     label: "Worker Node Count"
     description: "Worker Node Count"
     type: number
-    default: 3
+    default: 2
 
   lab_repo:
     label: "Lab Repo"
@@ -97,7 +97,7 @@ resources:
     properties:
       cloud_config:
         bootcmd:
-          - sleep 60
+          - sleep 15
         packages:
           - tmux
           - multitail

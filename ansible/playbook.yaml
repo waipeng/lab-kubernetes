@@ -6,6 +6,38 @@
     - name: Test
       ping:
 
+    - name: Install Aptitude Package
+      apt:
+        pkg: aptitude
+        state: latest
+
+    - name: Update and Upgrade Packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: Install Base Packages
+      apt:
+        pkg: "{{ item }}"
+        state: latest
+      with_items:
+        - tmux
+        - multitail
+        - colordiff
+        - fping
+        - htop
+        - ncdu
+        - moreutils
+        - bmon
+
+    - name: Enable Color Prompt
+      lineinfile:
+        dest: /root/.bashrc
+        regexp: "^(#)?force_color_prompt"
+        line: "force_color_prompt=yes"
+        insertafter: EOF
+        state: present
+
 - name: Master Node
   hosts: master
   tasks:

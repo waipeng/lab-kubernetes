@@ -87,4 +87,4 @@
     - name: Join Worker
       command: "{{ hostvars['master'].kubeadm_init_result.stdout_lines | last }}"
       args:
-        creates: "/etc/kubernetes/admin.conf"
+        creates: "/etc/kubernetes/bootstrap-kubelet.conf"

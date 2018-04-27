@@ -66,7 +66,12 @@
       ping:
 
     - name: Init Kubernetes Master
-      command: "kubeadm init --pod-network-cidr 10.244.0.0/16"
+      command: "kubeadm init --pod-network-cidr=10.244.0.0/16"
+      args:
+        creates: "/etc/kubernetes/admin.conf"
+
+    - name: Configure Flannel
+      command: "KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml"
 
 - name: Worker Nodes
   hosts: worker

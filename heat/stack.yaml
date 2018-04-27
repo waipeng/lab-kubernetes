@@ -20,7 +20,7 @@ parameters:
     label: "Lab Repo"
     description: "Lab Repo"
     type: string
-    default: "lab-kubernetes"
+    default: "https://github.com/cloud-training/lab-kubernetes.git"
 
   lab_repo_version:
     label: "Lab Repo Version"
@@ -128,10 +128,13 @@ resources:
                   function exit_success {
                     %swift_signal_notify% --data-binary '{"status": "SUCCESS"}'
                   }
-                  git clone https://github.com/cloud-training/%lab_repo%.git /opt/cloud-training/%lab_repo% || exit_failure "Git Clone"
-                  cd /opt/cloud-training/%lab_repo%
+                  git clone %lab_repo% /opt/cloud-training/lab || exit_failure "Git Clone - %lab_repo%"
+                  cd /opt/cloud-training/lab
                   git checkout %lab_repo_version% || exit_failure "Git Checkout - %lab_repo_version%"
-                  git status
+                  cd /opt/cloud-training/lab/ansible
+                  virtualenv .venv || exit_failure "Create Virtual Environment"
+                  source .venv/bin/activate || exit_failure "Activate Virtual Environment"
+                  pip install -r requirements.txt || exit_failure "PIP Install Requirements"
                   exit_success
                 params:
                   "%swift_signal_notify%": { get_attr: [swift_signal_handle, curl_cli] }

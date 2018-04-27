@@ -3,7 +3,7 @@
 - name: Base
   hosts: all
   tasks:
-    - name: Test
+    - name: Ping
       ping:
 
     - name: Enable Color Prompt
@@ -40,6 +40,12 @@
         - apt-transport-https
         - curl
 
+- name: Master and Worker Nodes
+  hosts: master,worker
+  tasks:
+    - name: Ping
+      ping:
+
     - name: Add Kubernetes APT Key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -62,7 +68,7 @@
 - name: Master Node
   hosts: master
   tasks:
-    - name: Test
+    - name: Ping
       ping:
 
     - name: Init Master
@@ -81,7 +87,7 @@
 - name: Worker Nodes
   hosts: worker
   tasks:
-    - name: Test
+    - name: Ping
       ping:
 
     - name: Join Worker

@@ -65,14 +65,11 @@
     - name: Test
       ping:
 
-    - name: Init Kubernetes Master
+    - name: Init Master
       command: "kubeadm init --pod-network-cidr=10.244.0.0/16"
       args:
         creates: "/etc/kubernetes/admin.conf"
       register: kubeadm_init_result
-
-    - debug:
-        var: kubeadm_init_result
 
     - name: Configure Flannel CNI
       command: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml"
@@ -86,3 +83,8 @@
   tasks:
     - name: Test
       ping:
+
+    - name: Join Worker
+      command: "{{ hostvars['master'].kubeadm_init_result.stdout_lines | last }}"
+      args:
+        creates: "/etc/kubernetes/admin.conf"

@@ -1,0 +1,19 @@
+---
+
+- name: Base
+  hosts: all
+  tasks:
+    - name: Test
+      ping:
+
+- name: Master Node
+  hosts: master
+  tasks:
+    - name: Test
+      ping:
+
+- name: Worker Nodes
+  hosts: worker
+  tasks:
+    - name: Test
+      ping:

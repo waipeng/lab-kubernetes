@@ -112,6 +112,33 @@ resources:
           - path: "/opt/cloud-training/id_rsa"
             permissions: "0600"
             content: { get_attr: [keypair, private_key] }
+          - path: "/opt/cloud-training/hosts.j2"
+            permissions: "0600"
+            content: |
+              [all]
+              master ansible_ssh_host={{ master_node_ip_address }}
+              {% for worker_node_ip_address in worker_nodes_ip_address %}
+              worker-{{ loop.index0 }} ansible_ssh_host={{ worker_node_ip_address }}
+              {% endfor %}
+              
+              [master]
+              master
+              
+              [worker]
+              {% for worker_node_ip_address in worker_nodes_ip_address %}
+              worker-{{ loop.index0 }}
+              {% endfor %}
+          - path: "/opt/cloud-training/environment.yaml"
+            permissions: "0600"
+            content:
+              str_replace:
+                template: |
+                  ---
+                  master_node_ip_address: "%master_node_ip_address%"
+                  worker_nodes_ip_address: %worker_nodes_ip_address%
+                params:
+                  "%master_node_ip_address%": { get_attr: [server_master_node, accessIPv4] }
+                  "%worker_nodes_ip_address%": { get_attr: [server_worker_nodes, accessIPv4] }
           - path: "/opt/cloud-training/runcmd-bash"
             permissions: "0700"
             content:
@@ -135,6 +162,8 @@ resources:
                   virtualenv .venv || exit_failure "Create Virtual Environment"
                   source .venv/bin/activate || exit_failure "Activate Virtual Environment"
                   pip install -r requirements.txt || exit_failure "PIP Install Requirements"
+                  ansible localhost -e @/opt/cloud-training/environment.yaml -m template -a "src=/opt/cloud-training/hosts.j2 dest=/opt/cloud-training/hosts" || exit_failure "Ansible Inventory Template"
+                  ansible-playbook playbook.yaml || exit_failure "Ansible Playbook Run"
                   exit_success
                 params:
                   "%swift_signal_notify%": { get_attr: [swift_signal_handle, curl_cli] }

@@ -101,7 +101,7 @@
       args:
         creates: "/etc/cni/net.d/10-flannel.conf"
 
-    - name: Describe Nodes
+    - name: Describe Master Node
       command: "kubectl describe node {{ ansible_hostname }}"
       register: kubectl_describe_node_master_result
 

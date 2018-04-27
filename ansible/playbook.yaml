@@ -6,6 +6,14 @@
     - name: Test
       ping:
 
+    - name: Enable Color Prompt
+      lineinfile:
+        dest: /root/.bashrc
+        regexp: "^(#)?force_color_prompt"
+        line: "force_color_prompt=yes"
+        insertafter: EOF
+        state: present
+
     - name: Install Aptitude Package
       apt:
         pkg: aptitude
@@ -51,20 +59,14 @@
         - kubeadm
         - kubectl
 
-    - name: Enable Color Prompt
-      lineinfile:
-        dest: /root/.bashrc
-        regexp: "^(#)?force_color_prompt"
-        line: "force_color_prompt=yes"
-        insertafter: EOF
-        state: present
-
 - name: Master Node
   hosts: master
   tasks:
     - name: Test
       ping:
 
+    - name: Init Kubernetes Master
+      command: "kubeadm init --pod-network-cidr 10.244.0.0/16"
 
 - name: Worker Nodes
   hosts: worker

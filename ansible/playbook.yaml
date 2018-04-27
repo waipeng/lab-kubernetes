@@ -105,21 +105,11 @@
       command: "kubectl describe node {{ ansible_hostname }}"
       register: kubectl_describe_node_master_result
 
-    - debug:
-        var: kubectl_describe_node_master_result
-
     - name: Untaint Master for AIO Scheduling
       command: "kubectl taint nodes --all node-role.kubernetes.io/master-"
       when:
         - "{{ groups['worker'] | length == 0 }}"
         - "{{ 'node-role.kubernetes.io/master:NoSchedule' in kubectl_describe_node_master_result.stdout }}"
-
-    - name: Describe Nodes
-      command: "kubectl describe node {{ ansible_hostname }}"
-      register: kubectl_describe_node_master_result
-
-    - debug:
-        var: kubectl_describe_node_master_result
 
 - name: Worker Nodes
   hosts: worker

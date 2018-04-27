@@ -29,6 +29,27 @@
         - ncdu
         - moreutils
         - bmon
+        - apt-transport-https
+        - curl
+
+    - name: Add Kubernetes APT Key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+    - name: Add Kubernetes APT Repository
+      apt_repository:
+        repo: "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+        filename: "kubernetes"
+
+    - name: Install Packages
+      apt:
+        pkg: "{{ item }}"
+        state: latest
+      with_items:
+        - docker.io
+        - kubelet
+        - kubeadm
+        - kubectl
 
     - name: Enable Color Prompt
       lineinfile:
@@ -43,6 +64,7 @@
   tasks:
     - name: Test
       ping:
+
 
 - name: Worker Nodes
   hosts: worker

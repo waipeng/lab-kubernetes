@@ -4,12 +4,6 @@ description: "Kubernetes Lab"
 
 parameters:
 
-  prefix:
-    label: "Prefix"
-    description: "Prefix"
-    type: string
-    default: "lab"
-
   worker_node_count:
     label: "Worker Node Count"
     description: "Worker Node Count"
@@ -26,9 +20,15 @@ parameters:
     label: "Lab Repo Version"
     description: "Lab Repo Version"
     type: string
-    default: "master"
+    default: "v1.0.0"
 
 resources:
+
+  prefix:
+    type: OS::Heat::TestResource
+    properties:
+      value: { get_param: "OS::stack_name" }
+      # value: { str_split : ["-", { get_param: "OS::stack_id" }, 0] }
 
   password:
     type: OS::Heat::RandomString
@@ -44,7 +44,7 @@ resources:
         str_replace:
           template: "%prefix%-keypair"
           params:
-            "%prefix%": { get_param: prefix }
+            "%prefix%": { get_attr: [prefix, output] }
 
   server_master_node:
     type: OS::Nova::Server
@@ -53,7 +53,7 @@ resources:
         str_replace:
           template: "%prefix%-master"
           params:
-            "%prefix%": { get_param: prefix }
+            "%prefix%": { get_attr: [prefix, output] }
       flavor: "2 GB Performance"
       image: "Ubuntu 16.04 LTS (Xenial Xerus) (PVHVM)"
       admin_pass: { get_resource: password }
@@ -73,7 +73,7 @@ resources:
             str_replace:
               template: "%prefix%-worker-%index%"
               params:
-                "%prefix%": { get_param: prefix }
+                "%prefix%": { get_attr: [prefix, output] }
           flavor: "1 GB Performance"
           image: "Ubuntu 16.04 LTS (Xenial Xerus) (PVHVM)"
           admin_pass: { get_resource: password }
@@ -189,7 +189,7 @@ resources:
         str_replace:
           template: "%prefix%-ansible"
           params:
-            "%prefix%": { get_param: prefix }
+            "%prefix%": { get_attr: [prefix, output] }
       flavor: "512MB Standard Instance"
       image: "Ubuntu 16.04 LTS (Xenial Xerus) (PVHVM)"
       admin_pass: { get_resource: password }

@@ -58,7 +58,7 @@
     - name: Install Packages
       apt:
         pkg: "{{ item }}"
-        state: latest
+        state: present
       with_items:
         - docker.io=1.13.*
         - kubelet=1.10.*

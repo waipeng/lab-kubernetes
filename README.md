@@ -216,3 +216,17 @@ kube-system   deployment.apps/kube-dns   1         1         1            1     
 NAMESPACE     NAME                                  DESIRED   CURRENT   READY     AGE
 kube-system   replicaset.apps/kube-dns-86f4d74b45   1         1         1         52m
 ```
+
+### Delete Lab
+
+When you are done with your Lab, you can delete the Stack and all of its resources by running the following command:
+
+```
+(.venv) $ openstack stack delete \
+  --os-cloud my-cloud-account    \
+  --os-region ORD                \
+  --wait                         \
+  my-stack-name
+```
+
+The `--wait` option will cause the command to not return until the Stack had been fully deleted. If you want the delete to be asynchronous, then you may omit this option.

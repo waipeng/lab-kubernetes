@@ -69,7 +69,7 @@ $ chmod 600 ~/.config/openstack/clouds.yaml
 
 ### Create Lab
 
-If you created a virtual environment above, ensure you have activated that virtual environment, and that the OpenStack and Heat clients are installed. Create your Kubernetes Lab by running the following command.
+If you created a virtual environment above, ensure you have activated that virtual environment, and that the OpenStack and Heat clients are installed. Create your Kubernetes Lab by running the following command:
 
 ```
 (.venv) $ openstack stack create                                                                    \

@@ -75,7 +75,7 @@
         state: present
 
     - name: Add Kubernetes DNS Nameserver to ENI
-      lineinfile:
+      replace:
         dest: /etc/network/interfaces
         regexp: "^    dns-nameservers(.*)?$"
         replace: "    dns-nameservers 10.96.0.10 8.8.8.8 8.8.4.4"

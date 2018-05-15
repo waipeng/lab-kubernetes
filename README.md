@@ -15,7 +15,7 @@ Install the OpenStack and Heat clients. An example of installing these into a vi
 ```
 $ sudo apt update
 $ sudo apt upgrade
-$ sudo apt install python-virtualenv
+$ sudo apt install python-virtualenv python-dev gcc
 $ mkdir ~/lab-kubernetes/
 $ cd ~/lab-kubernetes/
 $ virtualenv .venv

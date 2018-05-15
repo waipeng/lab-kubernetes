@@ -101,11 +101,11 @@ The `lab_repo_version` parameter allows specifying an alternative version to che
 Check on the status of your Lab build by running the following command:
 
 ```
-(.venv) $ openstack stack status \
-  --os-cloud my-cloud-account    \
-  --os-region ORD                \
-  --column stack_status          \
-  --column stack_status_reason   \
+(.venv) $ openstack stack show \
+  --os-cloud my-cloud-account  \
+  --os-region ORD              \
+  --column stack_status        \
+  --column stack_status_reason \
   my-stack-name
 ```
 

@@ -125,6 +125,6 @@
       ping:
 
     - name: Join Worker
-      command: "{{ hostvars['master'].kubeadm_init_result.stdout_lines | last }}"
+      command: "{{ hostvars['master'].kubeadm_init_result.stdout_lines | last }} --ignore-preflight-errors=cri"
       args:
         creates: "/etc/kubernetes/bootstrap-kubelet.conf"
